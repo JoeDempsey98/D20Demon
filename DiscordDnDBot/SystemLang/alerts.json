@@ -1,4 +1,6 @@
 {
   "TEST": "Hello World!",
-  "WELCOME_&NAME": "Hello {0}! I am a bot!!"
+  "WELCOME_&NAME": "Hello {0}! I am a bot!!",
+  "KICK_&NAME_&REASON": "Kicking {0} for {1}.",
+  "BAN_&NAME_&REASON": "Banning {0} for {1}."
 }

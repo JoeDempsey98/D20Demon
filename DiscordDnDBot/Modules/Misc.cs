@@ -52,6 +52,22 @@ namespace DiscordDnDBot.Modules
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
+        [Command("create")]
+        public async Task CreateCharacter([Remainder]string name)
+        {
+            CharacterSheet character = new CharacterSheet(name, Context.User.Username);
+            CharacterCommands.UpdateCharactersJson(character);
+            await Context.Channel.SendMessageAsync("Creating " + name);
+        }
+
+        [Command("show")]
+        public async Task ShowCharacter([Remainder]string name)
+        {
+            EmbedBuilder embed = CharacterCommands.DisplayCharacter(name, Context);
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
+
         [Command("kick")]
         public async Task Kick([Remainder]string str)
         {

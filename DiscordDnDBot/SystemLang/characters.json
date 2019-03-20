@@ -1,0 +1,28 @@
+[
+  {
+    "characterName": "Johann",
+    "playerName": "Ren Tuhou",
+    "characterClass": null,
+    "hpMax": 0,
+    "hpCurrent": 0,
+    "strength": 0,
+    "dexterity": 0,
+    "constitution": 0,
+    "wisdom": 0,
+    "intelligence": 0,
+    "charisma": 0
+  },
+  {
+    "characterName": "Rickey Smiley",
+    "playerName": "Ren Tuhou",
+    "characterClass": null,
+    "hpMax": 10,
+    "hpCurrent": 10,
+    "strength": 10,
+    "dexterity": 10,
+    "constitution": 10,
+    "wisdom": 10,
+    "intelligence": 10,
+    "charisma": 20
+  }
+]

@@ -68,6 +68,20 @@ namespace DiscordDnDBot.Modules
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
+        [Command("help")]
+        public async Task Help()
+        {
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.WithDescription("List of Available Commands:");
+            embed.AddField("$create X", "Create a new character with the name 'X'");
+            embed.AddField("$show X", "Show the character with the name 'X'");
+            embed.AddField("$kick X | Y", "Kick a user with the name 'X', for the reason 'Y' (by default this is 'reasons')");
+            embed.AddField("$ban X | Y", "Ban a user with the name 'X', for the reason 'Y' (by default this is 'reasons')");
+            embed.WithColor(Color.DarkRed);
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
+
         [Command("kick")]
         public async Task Kick([Remainder]string str)
         {

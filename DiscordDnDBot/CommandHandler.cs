@@ -12,8 +12,8 @@ namespace DiscordDnDBot
     class CommandHandler
     {
         DiscordSocketClient _client;
-        CommandService _service;
-
+        static CommandService _service;
+        
         public async Task InitializeAsync(DiscordSocketClient client)
         {
             _client = client;
@@ -37,6 +37,11 @@ namespace DiscordDnDBot
                     Console.WriteLine(result.ErrorReason);
                 }
             }
+        }
+        public static CommandService GetCommandService()
+        {
+            
+            return _service;
         }
     }
 }

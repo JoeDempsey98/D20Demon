@@ -20,9 +20,13 @@ namespace DiscordDnDBot
         public int wisdom;
         public int intelligence;
         public int charisma;
-        
 
-
+        int strMod;
+        int dexMod;
+        int conMod;
+        int wisMod;
+        int intMod;
+        int chaMod;
         
         public CharacterSheet(string characterName, string playerName)
         {
@@ -35,8 +39,14 @@ namespace DiscordDnDBot
             this.playerName = playerName;
             this.characterClass = characterClass;
         }*/
-        
 
+        public void SetMaxHp(int baseHp)
+        {
+            decimal d = (constitution - 10) / 2;
+            conMod = Convert.ToInt32(Math.Floor(d));
+            Console.WriteLine(conMod);
+            hpMax = baseHp + conMod;
+        }
         public void RollStats()
         {
             Dice d1 = new Dice();

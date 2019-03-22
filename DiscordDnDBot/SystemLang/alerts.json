@@ -2,5 +2,8 @@
   "TEST": "Hello World!",
   "WELCOME_&NAME": "Hello {0}! I am a bot!!",
   "KICK_&NAME_&REASON": "Kicking {0} for {1}.",
-  "BAN_&NAME_&REASON": "Banning {0} for {1}."
+  "BAN_&NAME_&REASON": "Banning {0} for {1}.",
+  "DICE_ROLL_FAIL": "Failed to roll dice, make sure you used the command correctly.",
+  "DICE_ROLL_RESULT": "Rolled a total of {0}",
+  "ABILITY_ROLL_RESULT": "With a {0} modifier of {1}, {2} rolled a {3}"
 }

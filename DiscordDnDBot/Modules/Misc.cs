@@ -67,6 +67,67 @@ namespace DiscordDnDBot.Modules
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
+        [Command("roll")]
+        public async Task RollDice([Remainder]string str)
+        {
+            string[] diceCode = str.Split('d');
+            if (diceCode.Length < 2)
+            {
+                await Context.Channel.SendMessageAsync(Utilities.GetAlert("DICE_ROLL_FAIL"));
+                return;
+            }
+            Dice dice = new Dice(Int32.Parse(diceCode[1]));
+            int roll = dice.Roll(Int32.Parse(diceCode[0]));
+
+            await Context.Channel.SendMessageAsync(Utilities.GetFormattedAlert("DICE_ROLL_RESULT", roll));
+        }
+        [Command("str")]
+        public async Task RollStrength()
+        {
+            EmbedBuilder embed = CharacterCommands.RollStr((SocketGuildUser)Context.User);
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
+
+        [Command("dex")]
+        public async Task RollDexterity()
+        {
+            EmbedBuilder embed = CharacterCommands.RollDex((SocketGuildUser)Context.User);
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
+
+        [Command("con")]
+        public async Task RollConstitution()
+        {
+            EmbedBuilder embed = CharacterCommands.RollCon((SocketGuildUser)Context.User);
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
+
+        [Command("wis")]
+        public async Task RollWisdom()
+        {
+            EmbedBuilder embed = CharacterCommands.RollWis((SocketGuildUser)Context.User);
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
+
+        [Command("int")]
+        public async Task RollIntelligence()
+        {
+            EmbedBuilder embed = CharacterCommands.RollInt((SocketGuildUser)Context.User);
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
+
+        [Command("cha")]
+        public async Task RollCharisma()
+        {
+            EmbedBuilder embed = CharacterCommands.RollCha((SocketGuildUser)Context.User);
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
 
         [Command("help")]
         public async Task Help()
@@ -83,6 +144,7 @@ namespace DiscordDnDBot.Modules
         }
 
         [Command("kick")]
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task Kick([Remainder]string str)
         {
             string[] userAndReason = str.Split(" | ");
@@ -105,6 +167,7 @@ namespace DiscordDnDBot.Modules
         }
 
         [Command("ban")]
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task Ban([Remainder]string str)
         {
             string[] userAndReason = str.Split(" | ");

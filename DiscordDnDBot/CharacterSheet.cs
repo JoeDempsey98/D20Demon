@@ -21,12 +21,6 @@ namespace DiscordDnDBot
         public int intelligence;
         public int charisma;
 
-        int strMod;
-        int dexMod;
-        int conMod;
-        int wisMod;
-        int intMod;
-        int chaMod;
         
         public CharacterSheet(string characterName, string playerName)
         {
@@ -39,11 +33,15 @@ namespace DiscordDnDBot
             this.playerName = playerName;
             this.characterClass = characterClass;
         }*/
+        public int GetMod(int abilityScore)
+        {
+            decimal d = (abilityScore - 10) / 2;
+            return Convert.ToInt32(Math.Floor(d));
+        }
 
         public void SetMaxHp(int baseHp)
         {
-            decimal d = (constitution - 10) / 2;
-            conMod = Convert.ToInt32(Math.Floor(d));
+            int conMod = GetMod(constitution);
             Console.WriteLine(conMod);
             hpMax = baseHp + conMod;
         }

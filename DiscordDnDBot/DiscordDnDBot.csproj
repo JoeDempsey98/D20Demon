@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeFrameworkVersion>2.1.5</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>2.1</RuntimeFrameworkVersion>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
     <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
   </PropertyGroup>
@@ -20,7 +20,7 @@
     <None Update="SystemLang\alerts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SystemLang\characters.json">
+    <None Update="Characters\characters.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

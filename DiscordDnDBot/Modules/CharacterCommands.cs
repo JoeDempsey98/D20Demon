@@ -6,12 +6,13 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 
 namespace DiscordDnDBot.Modules
 {
     class CharacterCommands
     {
-        static string path = "SystemLang/characters.json";
+        static string path = "Characters/characters.json";
 
         public static void UpdateCharactersJson(CharacterSheet character)
         {
@@ -64,6 +65,96 @@ namespace DiscordDnDBot.Modules
                         embed.WithImageUrl("http://www.gstatic.com/tv/thumb/persons/264690/264690_v9_bb.jpg");
                 }
             }
+            return embed;
+        }
+        public static EmbedBuilder RollStr(SocketGuildUser user)
+        {
+            Dice d20 = new Dice(20);
+            EmbedBuilder embed = new EmbedBuilder();
+            string json = File.ReadAllText(path);
+            List<CharacterSheet> characterSheets = JsonConvert.DeserializeObject<List<CharacterSheet>>(json);
+            embed.WithAuthor(user);
+
+            foreach (CharacterSheet character in characterSheets)
+            {
+                embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Strength", character.GetMod(character.strength), character.characterName, d20.Roll() + character.GetMod(character.strength)));
+            }
+
+            return embed;
+        }
+        public static EmbedBuilder RollDex(SocketGuildUser user)
+        {
+            Dice d20 = new Dice(20);
+            EmbedBuilder embed = new EmbedBuilder();
+            string json = File.ReadAllText(path);
+            List<CharacterSheet> characterSheets = JsonConvert.DeserializeObject<List<CharacterSheet>>(json);
+            embed.WithAuthor(user);
+
+            foreach (CharacterSheet character in characterSheets)
+            {
+                embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Dexterity", character.GetMod(character.dexterity), character.characterName, d20.Roll() + character.GetMod(character.dexterity)));
+            }
+
+            return embed;
+        }
+        public static EmbedBuilder RollCon(SocketGuildUser user)
+        {
+            Dice d20 = new Dice(20);
+            EmbedBuilder embed = new EmbedBuilder();
+            string json = File.ReadAllText(path);
+            List<CharacterSheet> characterSheets = JsonConvert.DeserializeObject<List<CharacterSheet>>(json);
+            embed.WithAuthor(user);
+
+            foreach (CharacterSheet character in characterSheets)
+            {
+                embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Constitution", character.GetMod(character.constitution), character.characterName, d20.Roll() + character.GetMod(character.constitution)));
+            }
+
+            return embed;
+        }
+        public static EmbedBuilder RollWis(SocketGuildUser user)
+        {
+            Dice d20 = new Dice(20);
+            EmbedBuilder embed = new EmbedBuilder();
+            string json = File.ReadAllText(path);
+            List<CharacterSheet> characterSheets = JsonConvert.DeserializeObject<List<CharacterSheet>>(json);
+            embed.WithAuthor(user);
+
+            foreach (CharacterSheet character in characterSheets)
+            {
+                embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Wisdom", character.GetMod(character.wisdom), character.characterName, d20.Roll() + character.GetMod(character.wisdom)));
+            }
+
+            return embed;
+        }
+        public static EmbedBuilder RollInt(SocketGuildUser user)
+        {
+            Dice d20 = new Dice(20);
+            EmbedBuilder embed = new EmbedBuilder();
+            string json = File.ReadAllText(path);
+            List<CharacterSheet> characterSheets = JsonConvert.DeserializeObject<List<CharacterSheet>>(json);
+            embed.WithAuthor(user);
+
+            foreach (CharacterSheet character in characterSheets)
+            {
+                embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Intelligence", character.GetMod(character.intelligence), character.characterName, d20.Roll() + character.GetMod(character.intelligence)));
+            }
+
+            return embed;
+        }
+        public static EmbedBuilder RollCha(SocketGuildUser user)
+        {
+            Dice d20 = new Dice(20);
+            EmbedBuilder embed = new EmbedBuilder();
+            string json = File.ReadAllText(path);
+            List<CharacterSheet> characterSheets = JsonConvert.DeserializeObject<List<CharacterSheet>>(json);
+            embed.WithAuthor(user);
+
+            foreach (CharacterSheet character in characterSheets)
+            {
+                embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Charisma", character.GetMod(character.charisma), character.characterName, d20.Roll() + character.GetMod(character.charisma)));
+            }
+
             return embed;
         }
     }

@@ -129,6 +129,42 @@ namespace DiscordDnDBot.Modules
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
+        [Command("class")]
+        public async Task GetOrSetClass([Remainder]string input = null)
+        {
+            string charName = null;
+            string className = null;
+            if (input != null)
+            {
+                string[] inputFormatted = input.Split(' ');
+                charName = inputFormatted[0];
+                if (inputFormatted.Length >= 2)
+                {
+                    for (int i = 1; i < inputFormatted.Length; i++)
+                        className += inputFormatted[i];
+                }
+            }
+
+            EmbedBuilder embed = null;
+            if (charName == null && className == null)
+                await Context.Channel.SendMessageAsync(Utilities.GetAlert("CLASS_USAGE"));
+            else if (charName != null && className == null)
+            {
+                embed = CharacterCommands.DisplayOrChangeClass((SocketGuildUser)Context.User, charName);
+            }
+            else if (charName != null && className != null)
+            {
+                embed = CharacterCommands.DisplayOrChangeClass((SocketGuildUser)Context.User, charName, className);
+            }
+            
+            if (embed == null && (charName != null || className != null))
+            {
+                embed = new EmbedBuilder();
+                embed.WithDescription("Something went wrong, make sure everything was typed correctly");
+            }
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
+
         [Command("help")]
         public async Task Help()
         {

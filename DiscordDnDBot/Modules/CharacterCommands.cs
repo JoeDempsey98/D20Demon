@@ -77,7 +77,8 @@ namespace DiscordDnDBot.Modules
 
             foreach (CharacterSheet character in characterSheets)
             {
-                embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Strength", character.GetMod(character.strength), character.characterName, d20.Roll() + character.GetMod(character.strength)));
+                if (character.playerName == user.Username)
+                    embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Strength", character.GetMod(character.strength), character.characterName, d20.Roll() + character.GetMod(character.strength)));
             }
 
             return embed;
@@ -92,7 +93,8 @@ namespace DiscordDnDBot.Modules
 
             foreach (CharacterSheet character in characterSheets)
             {
-                embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Dexterity", character.GetMod(character.dexterity), character.characterName, d20.Roll() + character.GetMod(character.dexterity)));
+                if (character.playerName == user.Username)
+                    embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Dexterity", character.GetMod(character.dexterity), character.characterName, d20.Roll() + character.GetMod(character.dexterity)));
             }
 
             return embed;
@@ -107,7 +109,8 @@ namespace DiscordDnDBot.Modules
 
             foreach (CharacterSheet character in characterSheets)
             {
-                embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Constitution", character.GetMod(character.constitution), character.characterName, d20.Roll() + character.GetMod(character.constitution)));
+                if (character.playerName == user.Username)
+                    embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Constitution", character.GetMod(character.constitution), character.characterName, d20.Roll() + character.GetMod(character.constitution)));
             }
 
             return embed;
@@ -122,7 +125,8 @@ namespace DiscordDnDBot.Modules
 
             foreach (CharacterSheet character in characterSheets)
             {
-                embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Wisdom", character.GetMod(character.wisdom), character.characterName, d20.Roll() + character.GetMod(character.wisdom)));
+                if (character.playerName == user.Username)
+                    embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Wisdom", character.GetMod(character.wisdom), character.characterName, d20.Roll() + character.GetMod(character.wisdom)));
             }
 
             return embed;
@@ -137,7 +141,8 @@ namespace DiscordDnDBot.Modules
 
             foreach (CharacterSheet character in characterSheets)
             {
-                embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Intelligence", character.GetMod(character.intelligence), character.characterName, d20.Roll() + character.GetMod(character.intelligence)));
+                if (character.playerName == user.Username)
+                    embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Intelligence", character.GetMod(character.intelligence), character.characterName, d20.Roll() + character.GetMod(character.intelligence)));
             }
 
             return embed;
@@ -152,8 +157,38 @@ namespace DiscordDnDBot.Modules
 
             foreach (CharacterSheet character in characterSheets)
             {
-                embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Charisma", character.GetMod(character.charisma), character.characterName, d20.Roll() + character.GetMod(character.charisma)));
+                if (character.playerName == user.Username)
+                    embed.AddField(character.characterName, Utilities.GetFormattedAlert("ABILITY_ROLL_RESULT", "Charisma", character.GetMod(character.charisma), character.characterName, d20.Roll() + character.GetMod(character.charisma)));
             }
+
+            return embed;
+        }
+        public static EmbedBuilder DisplayOrChangeClass(SocketGuildUser user, string charName, string charClass = null)
+        {
+            Dice d20 = new Dice(20);
+            EmbedBuilder embed = new EmbedBuilder();
+            string json = File.ReadAllText(path);
+            List<CharacterSheet> characterSheets = JsonConvert.DeserializeObject<List<CharacterSheet>>(json);
+            bool found = false;
+            
+            foreach (CharacterSheet character in characterSheets)
+            {
+                if (character.characterName == charName)
+                {
+                    if (character.playerName == user.Username && charClass != null)
+                    {
+                        character.characterClass = charClass;
+                    }
+                    embed.WithAuthor(character.playerName);
+                    embed.AddField(character.characterName, Utilities.GetFormattedAlert("CLASS_DISPLAY", character.characterName, character.characterClass));
+                    found = true;
+                }
+            }
+            json = JsonConvert.SerializeObject(characterSheets);
+            File.WriteAllText(path, json);
+
+            if (!found)
+                embed.WithDescription(Utilities.GetAlert("CLASS_ERROR"));
 
             return embed;
         }

@@ -11,9 +11,9 @@ namespace DiscordDnDBot
     {
         public string characterName;
         public string playerName;
-        public string characterClass;
+        public string characterClass { get; set; }
         public int hpMax;
-        public int hpCurrent;
+        public int hpCurrent { get; set; }
         public int strength;
         public int dexterity;
         public int constitution;

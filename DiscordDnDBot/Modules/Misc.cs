@@ -67,6 +67,7 @@ namespace DiscordDnDBot.Modules
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
+
         [Command("roll")]
         public async Task RollDice([Remainder]string str)
         {
@@ -81,6 +82,7 @@ namespace DiscordDnDBot.Modules
 
             await Context.Channel.SendMessageAsync(Utilities.GetFormattedAlert("DICE_ROLL_RESULT", roll));
         }
+
         [Command("str")]
         public async Task RollStrength()
         {

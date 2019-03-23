@@ -26,6 +26,8 @@ namespace DiscordDnDBot
         {
             this.characterName = characterName;
             this.playerName = playerName;
+            RollStats();
+            SetMaxHp(10);
         }
         /*public CharacterSheet(string characterName, string playerName, string characterClass)
         {
@@ -44,6 +46,7 @@ namespace DiscordDnDBot
             int conMod = GetMod(constitution);
             Console.WriteLine(conMod);
             hpMax = baseHp + conMod;
+            hpCurrent = hpMax;
         }
         public void RollStats()
         {

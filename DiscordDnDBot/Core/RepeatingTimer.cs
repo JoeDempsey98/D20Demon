@@ -43,6 +43,17 @@ namespace DiscordDnDBot.Core
                 time = DateTime.Now.ToShortDateString();
                 await channel.SendMessageAsync("Dawn of a New Day");
             }
+
+            IReadOnlyCollection<SocketGuild> guilds = Global.client.Guilds;
+            IReadOnlyCollection<SocketGuildUser> users;
+            foreach (SocketGuild guild in guilds)
+            {
+                users = guild.Users;
+                foreach (SocketGuildUser user in users)
+                {
+                    UserAccounts.UserAccounts.AddNewUser(user);
+                }
+            }
         }
     }
 }

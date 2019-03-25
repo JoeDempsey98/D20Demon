@@ -14,8 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\config.json">
+    <None Update="Core\UserAccounts\UserAccounts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="SystemLang\alerts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
+using DiscordDnDBot.Core;
 
 namespace DiscordDnDBot
 {
@@ -24,8 +25,10 @@ namespace DiscordDnDBot
                 LogLevel = LogSeverity.Verbose
             });
             _client.Log += Log;
+            _client.Ready += RepeatingTimer.StartTimer;
             await _client.LoginAsync(TokenType.Bot, Config.bot.token);
             await _client.StartAsync();
+            Global.client = _client;
             _handler = new CommandHandler();
             await _handler.InitializeAsync(_client);
             await Task.Delay(-1);

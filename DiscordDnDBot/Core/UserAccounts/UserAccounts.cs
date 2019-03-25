@@ -13,6 +13,10 @@ namespace DiscordDnDBot.Core.UserAccounts
         public static List<UserAccount> userAccounts;
         public static string path = "Core/UserAccounts/UserAccounts.json";
 
+        static UserAccounts()
+        {
+            userAccounts = new List<UserAccount>();
+        }
         public static void SaveUserAccounts()
         {
             if (!File.Exists(path)) File.Create(path);
@@ -26,20 +30,19 @@ namespace DiscordDnDBot.Core.UserAccounts
             userAccounts = JsonConvert.DeserializeObject<List<UserAccount>>(json);
             return userAccounts;
         }
-        public static bool UserIsFound(UserAccount user)
-        {
-            LoadUserAccounts();
-            if (userAccounts.Contains(user)) return true;
-            return false;
-        }
+        
         public static void AddNewUser(SocketGuildUser guildUser)
         {
+            LoadUserAccounts();
             UserAccount user = new UserAccount(guildUser.Id, guildUser.Username);
-            if(!UserIsFound(user))
+            if(userAccounts == null)
             {
-                LoadUserAccounts();
                 userAccounts.Add(user);
                 SaveUserAccounts();
+            }
+            else if (!userAccounts.Contains(user))
+            {
+                userAccounts.Add(user);
             }
         }
     }

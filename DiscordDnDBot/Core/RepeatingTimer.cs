@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Discord.WebSocket;
+using DiscordDnDBot.Core.DateAndTime;
+using DiscordDnDBot.Core.UserAccounts;
 
 namespace DiscordDnDBot.Core
 {
@@ -37,15 +39,15 @@ namespace DiscordDnDBot.Core
                 Console.WriteLine("Timer ticked, but client wasn't saved globally.");
                 return;
             }
-            Console.WriteLine(DateTime.Now.ToShortDateString());
-            if (DateTime.Now.ToShortDateString() != time)
+
+            if (DateTime.Now.ToShortDateString() != DateAndTimeManagement.LoadDate())
             {
-                time = DateTime.Now.ToShortDateString();
+                DateAndTimeManagement.SaveDate();
                 await channel.SendMessageAsync("Dawn of a New Day");
             }
 
             IReadOnlyCollection<SocketGuild> guilds = Global.client.Guilds;
-            IReadOnlyCollection<SocketGuildUser> users;
+            IReadOnlyCollection<SocketUser> users;
             foreach (SocketGuild guild in guilds)
             {
                 users = guild.Users;
@@ -54,6 +56,13 @@ namespace DiscordDnDBot.Core
                     UserAccounts.UserAccounts.AddNewUser(user);
                 }
             }
+
+            foreach (UserAccount u in UserAccounts.UserAccounts.userAccounts)
+            {
+                u.AddXP(1);
+                u.AddMoney(1);
+            }
+            UserAccounts.UserAccounts.SaveUserAccounts();
         }
     }
 }

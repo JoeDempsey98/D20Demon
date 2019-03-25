@@ -103,10 +103,10 @@ namespace DiscordDnDBot.Modules
         public async Task RollConstitution()
         {
             EmbedBuilder embed = CharacterCommands.RollCon((SocketGuildUser)Context.User);
-
+            
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
-
+        
         [Command("wis")]
         public async Task RollWisdom()
         {

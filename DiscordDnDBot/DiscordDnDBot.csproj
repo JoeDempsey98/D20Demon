@@ -14,6 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Core\DateAndTime\DateAndTime.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Core\UserAccounts\UserAccounts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

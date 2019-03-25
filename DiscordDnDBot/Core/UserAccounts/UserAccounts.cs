@@ -8,10 +8,10 @@ using Discord.WebSocket;
 
 namespace DiscordDnDBot.Core.UserAccounts
 {
-    static class UserAccounts
+    internal static class UserAccounts
     {
-        public static List<UserAccount> userAccounts;
-        public static string path = "Core/UserAccounts/UserAccounts.json";
+        internal static List<UserAccount> userAccounts;
+        private static string path = "Core/UserAccounts/UserAccounts.json";
 
         static UserAccounts()
         {
@@ -28,22 +28,21 @@ namespace DiscordDnDBot.Core.UserAccounts
             if (!File.Exists(path)) File.Create(path);
             string json = File.ReadAllText(path);
             userAccounts = JsonConvert.DeserializeObject<List<UserAccount>>(json);
+            if (userAccounts == null) userAccounts = new List<UserAccount>();
             return userAccounts;
         }
         
-        public static void AddNewUser(SocketGuildUser guildUser)
+        public static void AddNewUser(SocketUser guildUser)
         {
             LoadUserAccounts();
             UserAccount user = new UserAccount(guildUser.Id, guildUser.Username);
-            if(userAccounts == null)
+            
+            foreach (UserAccount u in userAccounts)
             {
-                userAccounts.Add(user);
-                SaveUserAccounts();
+                if (user.id == u.id) return;
             }
-            else if (!userAccounts.Contains(user))
-            {
-                userAccounts.Add(user);
-            }
+            userAccounts.Add(user);
+            SaveUserAccounts();
         }
     }
 }

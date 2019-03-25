@@ -41,7 +41,8 @@ namespace DiscordDnDBot
             {
                 if(reaction.Emote.Name == "👌")
                 {
-                    await channel.SendMessageAsync(reaction.User.Value.Username + " says Ok");
+                    Emoji emoji = (Emoji)reaction.Emote;
+                    await cache.Value.AddReactionAsync(emoji);
                 }
             }
         }

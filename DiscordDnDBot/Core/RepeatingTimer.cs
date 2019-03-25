@@ -14,8 +14,7 @@ namespace DiscordDnDBot.Core
     {
         private static Timer loopingTimer;
         private static SocketTextChannel channel;
-        private static string time;
-
+        
         internal static Task StartTimer()
         {
             loopingTimer = new Timer()
@@ -59,7 +58,6 @@ namespace DiscordDnDBot.Core
 
             foreach (UserAccount u in UserAccounts.UserAccounts.userAccounts)
             {
-                u.AddXP(1);
                 u.AddMoney(1);
             }
             UserAccounts.UserAccounts.SaveUserAccounts();

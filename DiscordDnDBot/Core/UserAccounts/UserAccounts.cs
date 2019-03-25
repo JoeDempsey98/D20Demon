@@ -44,5 +44,18 @@ namespace DiscordDnDBot.Core.UserAccounts
             userAccounts.Add(user);
             SaveUserAccounts();
         }
+
+        public static UserAccount GetAccount(SocketUser user)
+        {
+            LoadUserAccounts();
+            foreach (UserAccount u in userAccounts)
+            {
+                if (u.id == user.Id)
+                {
+                    return u;
+                }
+            }
+            return null;
+        }
     }
 }

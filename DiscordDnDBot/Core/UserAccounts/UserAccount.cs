@@ -11,8 +11,16 @@ namespace DiscordDnDBot.Core.UserAccounts
         public ulong id;
         public string username;
         public uint money;
-        public uint XP;
-        public uint lvl;
+        public uint XP { get; set; }
+        public uint lvl
+        {
+            get
+            {
+                //XP = lvl ^ 2 * 50
+                return (uint)Math.Sqrt(XP / 50);
+            }
+        }
+        public DateTime lastSentMessage { get; set; } = DateTime.Now;
 
         public UserAccount(ulong id, string username)
         {
@@ -20,24 +28,18 @@ namespace DiscordDnDBot.Core.UserAccounts
             this.username = username;
             XP = 0;
             money = 300;
-            lvl = 1;
         }
-
-        public void AddXP(uint amount)
-        {
-            XP += amount;
-            CheckLvl();
-        }
-
+        
         public void AddMoney(uint amount)
         {
             money += amount;
         }
 
-        public void CheckLvl()
+        public bool SpendMoney (uint amount)
         {
-            if (XP >= 100 * lvl)
-                lvl++;
+            if (amount > money) return false;
+            money -= amount;
+            return true;
         }
     }
 }

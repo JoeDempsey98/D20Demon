@@ -10,5 +10,6 @@ namespace DiscordDnDBot
     internal static class Global
     {
         internal static DiscordSocketClient client { get; set; }
+        internal static ulong MessageIdTracker { get; set; }
     }
 }

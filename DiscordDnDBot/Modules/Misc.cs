@@ -5,11 +5,27 @@ using System.Text;
 using Discord;
 using Discord.WebSocket;
 using System.Threading.Tasks;
+using Discord.Rest;
+using DiscordDnDBot.Core.UserAccounts;
 
 namespace DiscordDnDBot.Modules
 {
     public class Misc : ModuleBase<SocketCommandContext>
     {
+        [Command("lvl?")]
+        public async Task CalculateLevel()
+        {
+            var userAccount = UserAccounts.GetAccount(Context.User);
+            await Context.Channel.SendMessageAsync(Context.User.Username + " is level " + userAccount.lvl);
+        }
+
+        [Command("react")]
+        public async Task HandleReactionMessage()
+        {
+            RestUserMessage msg = await Context.Channel.SendMessageAsync("Test Message, react to test.");
+            Global.MessageIdTracker = msg.Id;
+        }
+
         [Command("echo")]
         public async Task Echo([Remainder]string message)
         {

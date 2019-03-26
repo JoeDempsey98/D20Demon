@@ -21,6 +21,8 @@ namespace DiscordDnDBot.Core.UserAccounts
             }
         }
         public DateTime lastSentMessage { get; set; } = DateTime.Now;
+        public bool isMuted { get; set; }
+        public uint NumOfWarnings { get; set; }
 
         public UserAccount(ulong id, string username)
         {

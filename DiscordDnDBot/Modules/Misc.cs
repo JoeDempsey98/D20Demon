@@ -190,57 +190,66 @@ namespace DiscordDnDBot.Modules
             embed.WithDescription("List of Available Commands:");
             embed.AddField("$create X", "Create a new character with the name 'X'");
             embed.AddField("$show X", "Show the character with the name 'X'");
-            embed.AddField("$kick X | Y", "Kick a user with the name 'X', for the reason 'Y' (by default this is 'reasons')");
-            embed.AddField("$ban X | Y", "Ban a user with the name 'X', for the reason 'Y' (by default this is 'reasons')");
+            embed.AddField("$kick X Y", "Kick a user with the name 'X', for the reason 'Y' (by default this is 'reasons')");
+            embed.AddField("$ban X Y", "Ban a user with the name 'X', for the reason 'Y' (by default this is 'reasons')");
             embed.WithColor(Color.DarkRed);
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
-        [Command("kick")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task Kick([Remainder]string str)
+        [Command("mute")]
+        [RequireUserPermission(GuildPermission.ManageMessages)]
+        [RequireBotPermission(GuildPermission.ManageMessages)]
+        public async Task MuteUser(IGuildUser user)
         {
-            string[] userAndReason = str.Split(" | ");
-            string offender = userAndReason[0];
-            string reason;
-            if (userAndReason.Length < 2)
-                reason = "reasons";
-            else
-                reason = userAndReason[1];
+            var userAccount = UserAccounts.GetAccount((SocketUser)user);
+            userAccount.isMuted = true;
+            UserAccounts.SaveUserAccounts();
+        }
 
-            foreach (SocketGuildUser user in Context.Guild.Users)
-            {                
-                SocketUser current = user;
-                if (current.Username == userAndReason[0])
-                {
-                    await Context.Channel.SendMessageAsync(Utilities.GetFormattedAlert("KICK_&NAME_&REASON", offender, reason));
-                    await user.KickAsync(reason);
-                }
+        [Command("unmute")]
+        [RequireUserPermission(GuildPermission.ManageMessages)]
+        [RequireBotPermission(GuildPermission.ManageMessages)]
+        public async Task UnmuteUser(IGuildUser user)
+        {
+            var userAccount = UserAccounts.GetAccount((SocketUser)user);
+            userAccount.isMuted = false;
+            UserAccounts.SaveUserAccounts();
+        }
+
+        [Command("warn")]
+        [RequireUserPermission(GuildPermission.ManageMessages)]
+        [RequireBotPermission(GuildPermission.ManageMessages)]
+        public async Task WarnUser(IGuildUser user, [Remainder]string reason = "No warning reason provided.")
+        {
+            var userAccount = UserAccounts.GetAccount((SocketUser)user);
+            userAccount.NumOfWarnings++;
+            UserAccounts.SaveUserAccounts();
+
+            SocketGuildUser guildUser = (SocketGuildUser)user;
+            await guildUser.SendMessageAsync(reason);
+            //check num of warnings
+            if(userAccount.NumOfWarnings >= 3)
+            {
+                userAccount.isMuted = true;
+                UserAccounts.SaveUserAccounts();
             }
         }
 
-        [Command("ban")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task Ban([Remainder]string str)
+        [Command("kick")]
+        [RequireUserPermission(GuildPermission.KickMembers)]
+        [RequireBotPermission(GuildPermission.KickMembers)]
+        public async Task KickUser(IGuildUser user, [Remainder]string reason = "No kick reason provided.")
         {
-            string[] userAndReason = str.Split(" | ");
-            string offender = userAndReason[0];
-            string reason;
-            if (userAndReason.Length < 2)
-                reason = "reasons";
-            else
-                reason = userAndReason[1];
-
-            foreach (SocketGuildUser user in Context.Guild.Users)
-            {
-                SocketUser current = user;
-                if (current.Username == userAndReason[0])
-                {
-                    await Context.Channel.SendMessageAsync(Utilities.GetFormattedAlert("BAN_&NAME_&REASON", offender, reason));
-                    await user.KickAsync(reason);
-                }
-            }
+            await user.KickAsync(reason);
+        }
+        
+        [Command("ban")]
+        [RequireUserPermission(GuildPermission.BanMembers)]
+        [RequireBotPermission(GuildPermission.BanMembers)]
+        public async Task BanUser(IGuildUser user, [Remainder]string reason = "No ban reason provided.")
+        {
+            await user.BanAsync(reason: reason);
         }
     }
 }

@@ -7,6 +7,7 @@ using Discord.WebSocket;
 using Discord.Commands;
 using System.Reflection;
 using DiscordDnDBot.Core.LevelingSystem;
+using DiscordDnDBot.Core.UserAccounts;
 
 namespace DiscordDnDBot
 {
@@ -28,6 +29,14 @@ namespace DiscordDnDBot
             var msg = s as SocketUserMessage;
             if (msg == null) return;
             var context = new SocketCommandContext(_client, msg);
+
+            //check for user is muted
+            var userAccount = UserAccounts.GetAccount(context.User);
+            if (userAccount.isMuted)
+            {
+                await context.Message.DeleteAsync();
+                return;
+            }
 
             //Award XP for messages
             if (!context.User.IsBot)

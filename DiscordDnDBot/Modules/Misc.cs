@@ -1,17 +1,23 @@
 ﻿using Discord.Commands;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Discord;
 using Discord.WebSocket;
 using System.Threading.Tasks;
 using Discord.Rest;
 using DiscordDnDBot.Core.UserAccounts;
+using DiscordDnDBot.Core.LevelingSystem;
+using System.IO;
 
 namespace DiscordDnDBot.Modules
 {
     public class Misc : ModuleBase<SocketCommandContext>
     {
+        [Command("card")]
+        public async Task DisplayUserCard()
+        {
+            var user = UserAccounts.GetAccount(Context.User);
+            await Context.Channel.SendFileAsync(new MemoryStream(UserLevelDisplayImage.HtmlToJpeg(user)),"testImage.jpg");
+        }
         [Command("lvl?")]
         public async Task CalculateLevel()
         {
@@ -40,7 +46,7 @@ namespace DiscordDnDBot.Modules
         [Command("pick")]
         public async Task Pick([Remainder]string message)
         {
-            string[] options = message.Split('|', StringSplitOptions.RemoveEmptyEntries);
+            string[] options = message.Split('|');
 
             Random rand = new Random();
             string selection = options[rand.Next(0, options.Length)];

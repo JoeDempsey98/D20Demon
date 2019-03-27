@@ -22,7 +22,8 @@ namespace DiscordDnDBot
             if (Config.bot.token == "" || Config.bot.token == null) return;
             _client = new DiscordSocketClient(new DiscordSocketConfig
             {
-                LogLevel = LogSeverity.Verbose
+                LogLevel = LogSeverity.Verbose,
+                WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance
             });
             _client.Log += Log;
             _client.Ready += RepeatingTimer.StartTimer;

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json;
-using System.Threading.Tasks;
 
 namespace DiscordDnDBot
 {

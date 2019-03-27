@@ -1,9 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
-using Newtonsoft.Json;
 
 namespace DiscordDnDBot
 {
@@ -30,12 +25,7 @@ namespace DiscordDnDBot
             RollStats();
             SetMaxHp(10);
         }
-        /*public CharacterSheet(string characterName, string playerName, string characterClass)
-        {
-            this.characterName = characterName;
-            this.playerName = playerName;
-            this.characterClass = characterClass;
-        }*/
+        
         public int GetMod(int abilityScore)
         {
             decimal d = (abilityScore - 10) / 2;

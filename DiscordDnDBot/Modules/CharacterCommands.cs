@@ -1,9 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
-using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -12,7 +9,7 @@ namespace DiscordDnDBot.Modules
 {
     class CharacterCommands
     {
-        static string path = "Characters/characters.json";
+        static string path = "Resources/Characters/characters.json";
 
         public static void UpdateCharactersJson(CharacterSheet character)
         {

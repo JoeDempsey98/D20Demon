@@ -30,7 +30,7 @@
     <None Update="SystemLang\alerts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Characters\characters.json">
+    <None Update="Resources\Characters\characters.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

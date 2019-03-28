@@ -4,19 +4,21 @@ namespace DiscordDnDBot
 {
     class CharacterSheet
     {
+        //character details
         public string characterName;
         public string playerName;
         public string characterClass { get; set; }
         public string avatarUrl { get; set; }
+        //hp
         public int hpMax;
         public int hpCurrent { get; set; }
+        //character stats
         public int strength;
         public int dexterity;
         public int constitution;
         public int wisdom;
         public int intelligence;
         public int charisma;
-
         
         public CharacterSheet(string characterName, string playerName)
         {
@@ -39,6 +41,7 @@ namespace DiscordDnDBot
             hpMax = baseHp + conMod;
             hpCurrent = hpMax;
         }
+
         public void RollStats()
         {
             Dice d1 = new Dice();
@@ -49,6 +52,7 @@ namespace DiscordDnDBot
             intelligence = d1.Roll(3);
             charisma = d1.Roll(3);
         }
+
         public string GetStats()
         {
             if (strength == 0)

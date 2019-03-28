@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Discord;
@@ -18,14 +19,22 @@ namespace DiscordDnDBot.Modules
                 ?? new List<CharacterSheet>();
 
             CharacterSheet temp = null;
-            foreach(CharacterSheet sheet in characterSheets)
+            foreach(CharacterSheet characterSheet in characterSheets)
             {
-                if (character.characterName == sheet.characterName)
-                    temp = sheet;
+                if (character.characterName == characterSheet.characterName)
+                    temp = characterSheet;
             }
             characterSheets.Remove(temp);
-            characterSheets.Add(character);
             
+            var result = from c in characterSheets
+                         where c.playerName == character.playerName
+                         select c;
+            foreach(CharacterSheet characterSheet in result)
+            {
+                characterSheets.Remove(characterSheet);
+            }
+            characterSheets.Add(character);
+
             jsonData = JsonConvert.SerializeObject(characterSheets, Formatting.Indented);
             File.WriteAllText(path, jsonData);
         }
@@ -188,6 +197,14 @@ namespace DiscordDnDBot.Modules
                 embed.WithDescription(Utilities.GetAlert("CLASS_ERROR"));
 
             return embed;
+        }
+        public static CharacterSheet GetCharacter(IGuildUser user)
+        {
+            List<CharacterSheet> characterSheets = JsonConvert.DeserializeObject<List<CharacterSheet>>(File.ReadAllText(path));
+            var result = from c in characterSheets
+                         where c.playerName == user.Username
+                         select c;
+            return result.FirstOrDefault();
         }
     }
 }

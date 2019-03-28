@@ -18,6 +18,7 @@ namespace DiscordDnDBot.Modules
             var user = UserAccounts.GetAccount(Context.User);
             await Context.Channel.SendFileAsync(new MemoryStream(UserLevelDisplayImage.HtmlToJpeg(user)),"testImage.jpg");
         }
+
         [Command("lvl?")]
         public async Task CalculateLevel()
         {
@@ -30,34 +31,6 @@ namespace DiscordDnDBot.Modules
         {
             RestUserMessage msg = await Context.Channel.SendMessageAsync("Test Message, react to test.");
             Global.MessageIdTracker = msg.Id;
-        }
-
-        [Command("echo")]
-        public async Task Echo([Remainder]string message)
-        {
-            var embed = new EmbedBuilder();
-            embed.WithTitle("Echoed message");
-            embed.WithDescription(message);
-            embed.WithColor(new Color(0, 255, 0));
-            
-            await Context.Channel.SendMessageAsync("",false, embed.Build());
-        }
-
-        [Command("pick")]
-        public async Task Pick([Remainder]string message)
-        {
-            string[] options = message.Split('|');
-
-            Random rand = new Random();
-            string selection = options[rand.Next(0, options.Length)];
-
-            var embed = new EmbedBuilder();
-            embed.WithTitle("Choice for " + Context.User.Username);
-            embed.WithDescription(selection);
-            embed.WithColor(new Color(65, 255, 100));
-            embed.WithThumbnailUrl("https://media1.tenor.com/images/5c406b927ec59a31eb67e3366f3121ef/tenor.gif?itemid=11909469");
-
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
         [Command("users")]
@@ -78,6 +51,7 @@ namespace DiscordDnDBot.Modules
         public async Task CreateCharacter([Remainder]string name)
         {
             CharacterSheet character = new CharacterSheet(name, Context.User.Username);
+            character.RollStats();
             CharacterCommands.UpdateCharactersJson(character);
             await Context.Channel.SendMessageAsync("Creating " + name);
         }
@@ -105,87 +79,72 @@ namespace DiscordDnDBot.Modules
             await Context.Channel.SendMessageAsync(Utilities.GetFormattedAlert("DICE_ROLL_RESULT", roll));
         }
 
-        [Command("str")]
-        public async Task RollStrength()
+        [Command("ability")]
+        public async Task RollAbility([Remainder]string ability)
         {
-            EmbedBuilder embed = CharacterCommands.RollStr((SocketGuildUser)Context.User);
+            EmbedBuilder embed;
 
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
-        }
-
-        [Command("dex")]
-        public async Task RollDexterity()
-        {
-            EmbedBuilder embed = CharacterCommands.RollDex((SocketGuildUser)Context.User);
-
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
-        }
-
-        [Command("con")]
-        public async Task RollConstitution()
-        {
-            EmbedBuilder embed = CharacterCommands.RollCon((SocketGuildUser)Context.User);
-            
+            switch (ability)
+            {
+                case "str":
+                    embed = CharacterCommands.RollStr((SocketGuildUser)Context.User);
+                    break;
+                case "dex":
+                    embed = CharacterCommands.RollDex((SocketGuildUser)Context.User);
+                    break;
+                case "con":
+                    embed = CharacterCommands.RollCon((SocketGuildUser)Context.User);
+                    break;
+                case "wis":
+                    embed = CharacterCommands.RollWis((SocketGuildUser)Context.User);
+                    break;
+                case "int":
+                    embed = CharacterCommands.RollInt((SocketGuildUser)Context.User);
+                    break;
+                case "cha":
+                    embed = CharacterCommands.RollCha((SocketGuildUser)Context.User);
+                    break;
+                case "strength":
+                    embed = CharacterCommands.RollStr((SocketGuildUser)Context.User);
+                    break;
+                case "dexterity":
+                    embed = CharacterCommands.RollDex((SocketGuildUser)Context.User);
+                    break;
+                case "constitution":
+                    embed = CharacterCommands.RollCon((SocketGuildUser)Context.User);
+                    break;
+                case "wisdom":
+                    embed = CharacterCommands.RollWis((SocketGuildUser)Context.User);
+                    break;
+                case "intelligence":
+                    embed = CharacterCommands.RollInt((SocketGuildUser)Context.User);
+                    break;
+                case "charisma":
+                    embed = CharacterCommands.RollCha((SocketGuildUser)Context.User);
+                    break;
+                default:
+                    embed = new EmbedBuilder();
+                    embed.WithDescription("Unrecognized command, try again");
+                    break;
+            }
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
         
-        [Command("wis")]
-        public async Task RollWisdom()
-        {
-            EmbedBuilder embed = CharacterCommands.RollWis((SocketGuildUser)Context.User);
-
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
-        }
-
-        [Command("int")]
-        public async Task RollIntelligence()
-        {
-            EmbedBuilder embed = CharacterCommands.RollInt((SocketGuildUser)Context.User);
-
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
-        }
-
-        [Command("cha")]
-        public async Task RollCharisma()
-        {
-            EmbedBuilder embed = CharacterCommands.RollCha((SocketGuildUser)Context.User);
-
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
-        }
-
         [Command("class")]
-        public async Task GetOrSetClass([Remainder]string input = null)
+        public async Task GetOrSetClass([Remainder]string className = null)
         {
-            string charName = null;
-            string className = null;
-            if (input != null)
-            {
-                string[] inputFormatted = input.Split(' ');
-                charName = inputFormatted[0];
-                if (inputFormatted.Length >= 2)
-                {
-                    for (int i = 1; i < inputFormatted.Length; i++)
-                        className += inputFormatted[i];
-                }
-            }
+            string charName = CharacterCommands.GetCharacter((IGuildUser)Context.User).characterName;
 
-            EmbedBuilder embed = null;
-            if (charName == null && className == null)
-                await Context.Channel.SendMessageAsync(Utilities.GetAlert("CLASS_USAGE"));
-            else if (charName != null && className == null)
+            EmbedBuilder embed;
+            if (className == null)
             {
                 embed = CharacterCommands.DisplayOrChangeClass((SocketGuildUser)Context.User, charName);
             }
-            else if (charName != null && className != null)
+            else
             {
                 embed = CharacterCommands.DisplayOrChangeClass((SocketGuildUser)Context.User, charName, className);
             }
             
-            if (embed == null && (charName != null || className != null))
-            {
-                embed = new EmbedBuilder();
-                embed.WithDescription("Something went wrong, make sure everything was typed correctly");
-            }
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
@@ -196,6 +155,8 @@ namespace DiscordDnDBot.Modules
             embed.WithDescription("List of Available Commands:");
             embed.AddField("$create X", "Create a new character with the name 'X'");
             embed.AddField("$show X", "Show the character with the name 'X'");
+            embed.AddField("$ability X", "Roll various ability checks (strength/str, dexterity/dex, etc.)");
+            embed.AddField("$class", "");
             embed.AddField("$kick X Y", "Kick a user with the name 'X', for the reason 'Y' (by default this is 'reasons')");
             embed.AddField("$ban X Y", "Ban a user with the name 'X', for the reason 'Y' (by default this is 'reasons')");
             embed.WithColor(Color.DarkRed);

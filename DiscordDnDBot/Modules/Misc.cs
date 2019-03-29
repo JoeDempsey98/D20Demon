@@ -170,12 +170,19 @@ namespace DiscordDnDBot.Modules
         {
             EmbedBuilder embed = new EmbedBuilder();
             embed.WithDescription("List of Available Commands:");
-            embed.AddField("$create X", "Create a new character with the name 'X'");
-            embed.AddField("$show X", "Show the character with the name 'X'");
-            embed.AddField("$ability X", "Roll various ability checks (strength/str, dexterity/dex, etc.)");
-            embed.AddField("$class", "");
-            embed.AddField("$kick X Y", "Kick a user with the name 'X', for the reason 'Y' (by default this is 'reasons')");
-            embed.AddField("$ban X Y", "Ban a user with the name 'X', for the reason 'Y' (by default this is 'reasons')");
+            embed.AddField("$create X", "Create a new character with the name 'X'", true);
+            embed.AddField("$show X", "Show the character with the name 'X'", true);
+            embed.AddField("$ability X", "Roll various ability checks (strength/str, dexterity/dex, etc.)", true);
+            embed.AddField("$class X", "Display or change the class of your character", true);
+            embed.AddField("$classes X", "Search for info on class 'X'", true);
+            embed.AddField("$spells X", "Search for info on spell 'X'", true);
+            embed.AddField("$card", "Display user card", true);
+            embed.AddField("$lvl?", "Display user level", true);
+            embed.AddField("$mute X", "Mute 'X' user from all text channels", true);
+            embed.AddField("$unmute X", "Unmute 'X' user from all text channels", true);
+            embed.AddField("$warn X (Y)", "Warn 'X' user for 'Y' reason (by default this is 'No warning reason provided.')", true);
+            embed.AddField("$kick X (Y)", "Kick 'X' user for 'Y' reason (by default this is 'No warning reason provided.')", true);
+            embed.AddField("$ban X (Y)", "Ban 'X' user for 'Y' reason (by default this is 'No warning reason provided.')", true);
             embed.WithColor(Color.DarkRed);
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());

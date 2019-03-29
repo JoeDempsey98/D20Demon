@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiscordDnDBot.Resources.Characters;
+using System;
 
 namespace DiscordDnDBot
 {
@@ -7,7 +8,7 @@ namespace DiscordDnDBot
         //character details
         public string characterName;
         public string playerName;
-        public string characterClass { get; set; }
+        public CharacterClass characterClass { get; set; }
         public string avatarUrl { get; set; }
         //hp
         public int hpMax;

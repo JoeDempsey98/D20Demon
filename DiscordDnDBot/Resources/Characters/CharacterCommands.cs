@@ -183,7 +183,7 @@ namespace DiscordDnDBot.Modules
                 {
                     if (character.playerName == user.Username && charClass != null)
                     {
-                        character.characterClass = charClass;
+                        character.characterClass.className = charClass;
                     }
                     embed.WithAuthor(character.playerName);
                     embed.AddField(character.characterName, Utilities.GetFormattedAlert("CLASS_DISPLAY", character.characterName, character.characterClass));

@@ -7,11 +7,28 @@ using Discord.Rest;
 using DiscordDnDBot.Core.UserAccounts;
 using DiscordDnDBot.Core.LevelingSystem;
 using System.IO;
+using DiscordDnDBot.Resources.Request;
 
 namespace DiscordDnDBot.Modules
 {
     public class Misc : ModuleBase<SocketCommandContext>
     {
+        [Command("classes")]
+        public async Task FetchClassesInfo([Remainder]string name)
+        {
+            var embed = _5eApi.FetchClassInfo(name);
+            embed.WithColor(Color.Blue);
+            await Context.Channel.SendMessageAsync(embed: embed.Build());
+        }
+
+        [Command("spells")]
+        public async Task FetchSpellsInfo([Remainder]string name)
+        {
+            var embed = _5eApi.FetchSpellInfo(name);
+            embed.WithColor(Color.DarkMagenta);
+            await Context.Channel.SendMessageAsync(embed: embed.Build());
+        }
+
         [Command("card")]
         public async Task DisplayUserCard()
         {

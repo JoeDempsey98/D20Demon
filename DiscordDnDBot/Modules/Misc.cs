@@ -13,6 +13,14 @@ namespace DiscordDnDBot.Modules
 {
     public class Misc : ModuleBase<SocketCommandContext>
     {
+        [Command("races")]
+        public async Task FetchRacesInfo([Remainder]string name)
+        {
+            var embed = _5eApi.FetchRaceInfo(name);
+            embed.WithColor(Color.DarkGreen);
+            await Context.Channel.SendMessageAsync(embed: embed.Build());
+        }
+
         [Command("classes")]
         public async Task FetchClassesInfo([Remainder]string name)
         {

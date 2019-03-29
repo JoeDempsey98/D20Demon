@@ -41,10 +41,10 @@ namespace DiscordDnDBot.Resources.Request
         {
             EmbedBuilder embed = new EmbedBuilder();
             string json;
-            string spells = baseUrl + "classes/";
+            string classes = baseUrl + "classes/";
             using (WebClient webClient = new WebClient())
             {
-                json = webClient.DownloadString(spells);
+                json = webClient.DownloadString(classes);
             }
             RootObject request = JsonConvert.DeserializeObject<RootObject>(json);
 
@@ -68,6 +68,55 @@ namespace DiscordDnDBot.Resources.Request
                     embed.AddField("Saving Throws", "-------");
                     foreach (SavingThrow s in classesRootObject.saving_throws)
                         embed.AddField("§", s.name, true);
+                }
+            }
+            return embed;
+        }
+        internal static EmbedBuilder FetchRaceInfo(string name)
+        {
+            EmbedBuilder embed = new EmbedBuilder();
+            string json;
+            string races = baseUrl + "races/";
+            using (WebClient webClient = new WebClient())
+            {
+                json = webClient.DownloadString(races);
+            }
+            RootObject request = JsonConvert.DeserializeObject<RootObject>(json);
+
+            var result = from r in request.results
+                         where r.name.ToLower().Contains(name.ToLower())
+                         select r.url;
+            foreach (string url in result)
+            {
+                using (WebClient webClient = new WebClient())
+                {
+                    json = webClient.DownloadString(url);
+                    Races.RootObject racesRootObject = JsonConvert.DeserializeObject<Races.RootObject>(json);
+                    //name
+                    embed.AddField(racesRootObject.name, "-------");
+                    //speed
+                    embed.AddField("Speed", racesRootObject.speed, true);
+                    //abilities
+                    embed.AddField("Ability Bonuses", "-------");
+                    string[] abilities = {"Strength", "Dexterity", "Constitution", "Wisdom", "Intelligence", "Charisma"};
+                    for (int i = 0; i < racesRootObject.ability_bonuses.Length; i++)
+                    {
+                        embed.AddField(abilities[i], racesRootObject.ability_bonuses[i], true);
+                    }
+                    //proficiencies
+                    embed.AddField("Starting Proficiencies", "-------");
+                    foreach(Races.StartingProficiency s in racesRootObject.starting_proficiencies)
+                    {
+                        embed.AddField("§", s.name, true);
+                    }
+                    //racial traits
+                    embed.AddField("Racial Traits", "-------");
+                    foreach (Races.Trait t in racesRootObject.traits)
+                    {
+                        embed.AddField("§", t.name, true);
+                    }
+                    //subrace
+                    embed.AddField("Subrace", racesRootObject.subraces.FirstOrDefault());
                 }
             }
             return embed;

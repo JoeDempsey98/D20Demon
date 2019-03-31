@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -117,6 +118,55 @@ namespace DiscordDnDBot.Resources.Request
                     }
                     //subrace
                     embed.AddField("Subrace", racesRootObject.subraces.FirstOrDefault());
+                }
+            }
+            return embed;
+        }
+        internal static EmbedBuilder FetchItemInfo(string name)
+        {
+            EmbedBuilder embed = new EmbedBuilder();
+            string json;
+            string items = baseUrl + "equipment/";
+            using (WebClient webClient = new WebClient())
+            {
+                json = webClient.DownloadString(items);
+            }
+            RootObject request = JsonConvert.DeserializeObject<RootObject>(json);
+
+            var result = from r in request.results
+                         where r.name.ToLower().Contains(name.ToLower())
+                         select r.url;
+            foreach (string url in result)
+            {
+                using (WebClient webClient = new WebClient())
+                {
+                    try
+                    {
+                        json = webClient.DownloadString(url);
+                        Items.RootObject itemsRootObject = JsonConvert.DeserializeObject<Items.RootObject>(json);
+                        //name
+                        embed.AddField("■ " + itemsRootObject.name, "-------");
+                        //item category
+                        embed.AddField("Item Category", itemsRootObject.equipment_category, true);
+                        //cost
+                        embed.AddField("Cost", itemsRootObject.cost.quantity + itemsRootObject.cost.unit, true);
+                        //if it is a weapon, display weapon type, damage, & range
+
+                        if (itemsRootObject.equipment_category == "Weapon")
+                        {
+                            string itemRange = null;
+
+                            if (itemsRootObject.range.@long == null) itemRange = "N/A";
+                            else itemRange = itemsRootObject.range.@long;
+                            embed.AddField("Weapon Type", itemsRootObject.category_range, true);
+                            embed.AddField("Damage", itemsRootObject.damage.dice_count + "d" + itemsRootObject.damage.dice_value + " " + itemsRootObject.damage.damage_type.name, true);
+                            embed.AddField("Range", "Standard: " + itemsRootObject.range.normal + " Long: " + itemRange, true);
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        break;
+                    }
                 }
             }
             return embed;

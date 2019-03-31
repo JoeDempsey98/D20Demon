@@ -13,6 +13,16 @@ namespace DiscordDnDBot.Modules
 {
     public class Misc : ModuleBase<SocketCommandContext>
     {
+        [Command("items")]
+        public async Task FetchItemInfo([Remainder]string name)
+        {
+            var embed = _5eApi.FetchItemInfo(name);
+            Embed embed1 = embed.Build();
+
+            await Context.Channel.SendMessageAsync(embed: embed.Build());
+            if (embed1.Length >= 25) await Context.Channel.SendMessageAsync("Search yielded to many results to display, consider refining.");
+        }
+
         [Command("races")]
         public async Task FetchRacesInfo([Remainder]string name)
         {

@@ -46,12 +46,12 @@ namespace DiscordDnDBot
         public void RollStats()
         {
             Dice d1 = new Dice();
-            strength = d1.Roll(3);
-            dexterity = d1.Roll(3);
-            constitution = d1.Roll(3);
-            wisdom = d1.Roll(3);
-            intelligence = d1.Roll(3);
-            charisma = d1.Roll(3);
+            strength = d1.Roll(4);
+            dexterity = d1.Roll(4);
+            constitution = d1.Roll(4);
+            wisdom = d1.Roll(4);
+            intelligence = d1.Roll(4);
+            charisma = d1.Roll(4);
         }
 
         public string GetStats()

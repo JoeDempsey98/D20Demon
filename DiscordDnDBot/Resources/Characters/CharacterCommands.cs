@@ -181,7 +181,7 @@ namespace DiscordDnDBot.Modules
             {
                 if (character.characterName == charName)
                 {
-                    if (character.playerName == user.Username && charClass != null)
+                    if (charClass != null)
                     {
                         character.characterClass.className = charClass;
                     }
